@@ -1,0 +1,54 @@
+Namespace.yml
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: notes-app
+
+
+------------------------------
+
+Deployment.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes-app-deployment
+  labels:
+    app: notes-app
+  namespace: notes-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notes-app
+  template:
+    metadata:
+      labels:
+        app: notes-app
+    spec:
+      containers:
+      - name: notes-app
+        image: swapnilmeshram/notes-app-k8s
+        ports:
+        - containerPort: 8000
+
+-----------------------------------------------------
+
+
+Service.yml
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: notes-app-service
+  namespace: notes-app
+spec:
+  selector:
+    app: notes-app
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+
